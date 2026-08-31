@@ -1,0 +1,3 @@
+class ProgressionManager {
+  const ProgressionManager();
+}

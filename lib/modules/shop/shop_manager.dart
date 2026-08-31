@@ -1,0 +1,3 @@
+class ShopManager {
+  const ShopManager();
+}

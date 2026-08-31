@@ -1,0 +1,3 @@
+class PuzzleValidator {
+  const PuzzleValidator();
+}

@@ -1,0 +1,3 @@
+class InterferenceCalculator {
+  const InterferenceCalculator();
+}

@@ -1,0 +1,3 @@
+class ProfileManager {
+  const ProfileManager();
+}

@@ -1,0 +1,3 @@
+class LevelState {
+  const LevelState();
+}

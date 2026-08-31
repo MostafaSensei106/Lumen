@@ -1,0 +1,3 @@
+class AchievementManager {
+  const AchievementManager();
+}

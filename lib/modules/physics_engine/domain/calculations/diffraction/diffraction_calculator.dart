@@ -1,0 +1,3 @@
+class DiffractionCalculator {
+  const DiffractionCalculator();
+}

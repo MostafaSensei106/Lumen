@@ -1,0 +1,3 @@
+class PolarizationCalculator {
+  const PolarizationCalculator();
+}

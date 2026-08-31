@@ -1,0 +1,3 @@
+class PuzzleState {
+  const PuzzleState();
+}
