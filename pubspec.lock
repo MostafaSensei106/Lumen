@@ -465,6 +465,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.12.2"
+  flame_bloc:
+    dependency: "direct main"
+    description:
+      name: flame_bloc
+      sha256: "727dc98d418b5fbddf1c996feb497727d6c8b3870a6e1d76f4be7c9a502a26c2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.12.24"
   flutter:
     dependency: "direct main"
     description: flutter
