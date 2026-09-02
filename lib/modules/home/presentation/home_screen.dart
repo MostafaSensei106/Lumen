@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lumen/core/widgets/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final lumen = context.lumen;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0D0D12), // Deep space background
+      backgroundColor: lumen.deepBackground,
       body: Stack(
         children: [
           // Decorative background elements
@@ -19,10 +22,10 @@ class HomeScreen extends StatelessWidget {
               height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.cyanAccent.withValues(alpha: 0.1),
+                color: lumen.neonGlow.withValues(alpha: 0.1),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.cyanAccent.withValues(alpha: 0.2),
+                    color: lumen.neonGlow.withValues(alpha: 0.2),
                     blurRadius: 100,
                   ),
                 ],
@@ -33,35 +36,36 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'L U M E N',
                   style: TextStyle(
-                    color: Colors.cyanAccent,
+                    color: lumen.neonGlow,
                     fontSize: 48,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 8,
-                    shadows: [Shadow(color: Colors.cyan, blurRadius: 20)],
+                    shadows: [Shadow(color: lumen.neonGlow.withValues(alpha: 0.5), blurRadius: 20)],
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
+                Text(
                   'BROKEN CIRCUIT',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: lumen.textSecondary,
                     fontSize: 16,
                     letterSpacing: 4,
                   ),
                 ),
                 const SizedBox(height: 60),
-                _buildMenuButton(context, 'PLAY', '/levels', Icons.play_arrow),
+                _buildMenuButton(context, 'PLAY', '/levels', Icons.play_arrow, lumen),
                 const SizedBox(height: 20),
-                _buildMenuButton(context, 'SHOP', '/shop', Icons.store),
+                _buildMenuButton(context, 'SHOP', '/shop', Icons.store, lumen),
                 const SizedBox(height: 20),
                 _buildMenuButton(
                   context,
                   'SETTINGS',
                   '/settings',
                   Icons.settings,
+                  lumen,
                 ),
               ],
             ),
@@ -76,6 +80,7 @@ class HomeScreen extends StatelessWidget {
     String title,
     String route,
     IconData icon,
+    LumenColorScheme lumen,
   ) {
     return InkWell(
       onTap: () => context.push(route),
@@ -84,19 +89,19 @@ class HomeScreen extends StatelessWidget {
         width: 250,
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
+          color: lumen.cardSurface,
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.3)),
+          border: Border.all(color: lumen.borderMuted),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.cyanAccent, size: 24),
+            Icon(icon, color: lumen.neonGlow, size: 24),
             const SizedBox(width: 15),
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: lumen.textPrimary,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 2,

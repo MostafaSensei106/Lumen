@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lumen/core/widgets/app_theme.dart';
 
 import 'lumen_game.dart';
 
@@ -18,29 +19,31 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lumen = context.lumen;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF07070F),
+      backgroundColor: lumen.deepBackground,
       appBar: AppBar(
         title: Text(
           'CIRCUIT SECTOR ${widget.levelId}',
-          style: const TextStyle(color: Colors.cyanAccent, letterSpacing: 3, fontWeight: FontWeight.bold),
+          style: TextStyle(color: lumen.neonGlow, letterSpacing: 3, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.cyanAccent),
+          icon: Icon(Icons.arrow_back, color: lumen.neonGlow),
           onPressed: () => context.pop(),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings, color: Colors.cyanAccent),
-            onPressed: () => _showSettingsSheet(context),
+            icon: Icon(Icons.settings, color: lumen.neonGlow),
+            onPressed: () => _showSettingsSheet(context, lumen),
           ),
         ],
       ),
       body: Stack(
         children: [
-          GameWidget(game: LumenGame(levelId: widget.levelId)),
+          GameWidget(game: LumenGame(levelId: widget.levelId, lumen: lumen)),
           // Overlay UI for the game
           Positioned(
             bottom: 20,
@@ -49,19 +52,19 @@ class _GameScreenState extends State<GameScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
-                color: Colors.black87,
+                color: lumen.cardSurface.withOpacity(0.9),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.cyanAccent.withOpacity(0.5), width: 2),
+                border: Border.all(color: lumen.borderMuted, width: 2),
                 boxShadow: [
-                  BoxShadow(color: Colors.cyanAccent.withOpacity(0.2), blurRadius: 10, spreadRadius: 1),
+                  BoxShadow(color: lumen.glowShadow.withOpacity(0.2), blurRadius: 10, spreadRadius: 1),
                 ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildTool(Icons.call_split, 'Node', true),
-                  _buildTool(Icons.change_history, 'Prism', false),
-                  _buildTool(Icons.lens, 'Filter', false),
+                  _buildTool(Icons.call_split, 'Node', true, lumen),
+                  _buildTool(Icons.change_history, 'Prism', false, lumen),
+                  _buildTool(Icons.lens, 'Filter', false, lumen),
                 ],
               ),
             ),
@@ -71,20 +74,20 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  Widget _buildTool(IconData icon, String label, bool active) {
+  Widget _buildTool(IconData icon, String label, bool active, LumenColorScheme lumen) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
           icon,
-          color: active ? Colors.cyanAccent : Colors.white54,
+          color: active ? lumen.neonGlow : lumen.textSecondary,
           size: 30,
         ),
         const SizedBox(height: 5),
         Text(
           label,
           style: TextStyle(
-            color: active ? Colors.cyanAccent : Colors.white54,
+            color: active ? lumen.neonGlow : lumen.textSecondary,
             fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
@@ -93,7 +96,7 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  void _showSettingsSheet(BuildContext context) {
+  void _showSettingsSheet(BuildContext context, LumenColorScheme lumen) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -103,18 +106,18 @@ class _GameScreenState extends State<GameScreen> {
             return Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF0D0D12),
+                color: lumen.cardSurface,
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
-                border: Border.all(color: Colors.cyanAccent.withOpacity(0.3)),
+                border: Border.all(color: lumen.borderMuted),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('QUICK SETTINGS', style: TextStyle(color: Colors.cyanAccent, fontSize: 18, letterSpacing: 2, fontWeight: FontWeight.bold)),
+                  Text('QUICK SETTINGS', style: TextStyle(color: lumen.neonGlow, fontSize: 18, letterSpacing: 2, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 20),
                   SwitchListTile(
-                    title: const Text('Music', style: TextStyle(color: Colors.white)),
-                    activeColor: Colors.cyanAccent,
+                    title: Text('Music', style: TextStyle(color: lumen.textPrimary)),
+                    activeColor: lumen.energyAccent,
                     value: _musicOn,
                     onChanged: (val) {
                       setState(() => _musicOn = val);
@@ -122,8 +125,8 @@ class _GameScreenState extends State<GameScreen> {
                     },
                   ),
                   SwitchListTile(
-                    title: const Text('Vibration (Haptics)', style: TextStyle(color: Colors.white)),
-                    activeColor: Colors.cyanAccent,
+                    title: Text('Vibration (Haptics)', style: TextStyle(color: lumen.textPrimary)),
+                    activeColor: lumen.energyAccent,
                     value: _vibrationOn,
                     onChanged: (val) {
                       setState(() => _vibrationOn = val);
