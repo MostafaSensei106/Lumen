@@ -1,15 +1,14 @@
 import 'dart:math' as math;
+
 import 'package:flame/components.dart';
+
 import '../../entities/ray.dart';
 
 class RefractionResult {
   final RaySegment? refractedRay;
   final RaySegment? totallyInternallyReflectedRay;
-  
-  RefractionResult({
-    this.refractedRay,
-    this.totallyInternallyReflectedRay,
-  });
+
+  RefractionResult({this.refractedRay, this.totallyInternallyReflectedRay});
 }
 
 class RefractionCalculator {
@@ -29,7 +28,7 @@ class RefractionCalculator {
   }) {
     Vector2 d = (incidentRay.end - incidentRay.start).normalized();
     Vector2 n = surfaceNormal.normalized();
-    
+
     if (d.dot(n) > 0) {
       n = -n;
     }
@@ -42,7 +41,7 @@ class RefractionCalculator {
       // Total Internal Reflection (TIR)
       Vector2 vOut = d - n * (2 * d.dot(n));
       Vector2 newEnd = intersectionPoint + vOut * 10000.0;
-      
+
       return RefractionResult(
         totallyInternallyReflectedRay: RaySegment(
           start: intersectionPoint,
@@ -54,7 +53,7 @@ class RefractionCalculator {
       // Refraction
       Vector2 t = d * eta + n * (eta * cosThetaI - math.sqrt(k));
       Vector2 newEnd = intersectionPoint + t * 10000.0;
-      
+
       return RefractionResult(
         refractedRay: RaySegment(
           start: intersectionPoint,

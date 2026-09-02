@@ -1,5 +1,7 @@
 import 'dart:math' as math;
+
 import 'package:flame/components.dart';
+
 import '../../entities/photon.dart';
 import '../../entities/ray.dart';
 
@@ -15,9 +17,10 @@ class PolarizationCalculator {
   }) {
     double rayAngle = incidentRay.photonState.polarization;
     double deltaTheta = (rayAngle - filterAngle).abs();
-    
+
     double cosDelta = math.cos(deltaTheta);
-    double transmittedIntensity = incidentRay.photonState.intensity * cosDelta * cosDelta;
+    double transmittedIntensity =
+        incidentRay.photonState.intensity * cosDelta * cosDelta;
 
     if (transmittedIntensity < noiseFloor) {
       return null;

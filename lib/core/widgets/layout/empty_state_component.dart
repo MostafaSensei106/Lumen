@@ -70,7 +70,10 @@ class EmptyStateComponent extends StatelessWidget {
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         shadows: [
-                          Shadow(color: color.withValues(alpha: 0.6), blurRadius: 8),
+                          Shadow(
+                            color: color.withValues(alpha: 0.6),
+                            blurRadius: 8,
+                          ),
                         ],
                       ),
                     ),

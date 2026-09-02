@@ -42,10 +42,7 @@ class TargetModel {
   final Vector2Model position;
   final double minIntensity;
 
-  TargetModel({
-    required this.position,
-    required this.minIntensity,
-  });
+  TargetModel({required this.position, required this.minIntensity});
 
   factory TargetModel.fromJson(Map<String, dynamic> json) {
     return TargetModel(
@@ -76,7 +73,8 @@ class LevelModel {
       circuitName: json['circuit_name'] as String,
       emitter: EmitterModel.fromJson(json['emitter']),
       target: TargetModel.fromJson(json['target']),
-      availableMirrors: (json['available_inventory']['flat_mirrors'] as int?) ?? 0,
+      availableMirrors:
+          (json['available_inventory']['flat_mirrors'] as int?) ?? 0,
     );
   }
 }

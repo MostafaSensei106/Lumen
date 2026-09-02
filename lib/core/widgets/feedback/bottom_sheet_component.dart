@@ -58,7 +58,9 @@ class BottomSheetComponent extends StatelessWidget {
                             borderRadius: BorderRadius.circular(2),
                             boxShadow: [
                               BoxShadow(
-                                color: context.lumen.neonGlow.withValues(alpha: 0.5),
+                                color: context.lumen.neonGlow.withValues(
+                                  alpha: 0.5,
+                                ),
                                 blurRadius: 4,
                                 spreadRadius: 1,
                               ),
@@ -78,7 +80,9 @@ class BottomSheetComponent extends StatelessWidget {
                           ),
                         ),
                         Divider(
-                          color: context.lumen.textPrimary.withValues(alpha: 0.1),
+                          color: context.lumen.textPrimary.withValues(
+                            alpha: 0.1,
+                          ),
                           height: 1,
                         ),
                       ],

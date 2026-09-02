@@ -54,7 +54,9 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor ?? context.lumen.deepBackground.withValues(alpha: 0.8),
+        color:
+            backgroundColor ??
+            context.lumen.deepBackground.withValues(alpha: 0.8),
         border: Border(
           bottom: BorderSide(
             color: bottomBorderColor ?? context.lumen.neonGlow,

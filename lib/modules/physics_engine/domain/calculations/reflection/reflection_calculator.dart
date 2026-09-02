@@ -1,9 +1,10 @@
 import 'package:flame/components.dart';
+
 import '../../entities/photon.dart';
 import '../../entities/ray.dart';
 
 class ReflectionCalculator {
-  /// Calculates the reflected ray given an incident ray, the intersection point, 
+  /// Calculates the reflected ray given an incident ray, the intersection point,
   /// the normal of the surface, and the reflectance of the mirror [0.0, 1.0].
   static RaySegment calculateReflection({
     required RaySegment incidentRay,

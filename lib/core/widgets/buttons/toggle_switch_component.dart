@@ -61,7 +61,9 @@ class ToggleSwitchComponent extends StatelessWidget {
           borderRadius: BorderRadius.circular(height / 2),
           color: value ? aColor.withValues(alpha: 0.2) : iColor,
           border: Border.all(
-            color: value ? aColor : context.lumen.textPrimary.withValues(alpha: 0.3),
+            color: value
+                ? aColor
+                : context.lumen.textPrimary.withValues(alpha: 0.3),
             width: 2,
           ),
           boxShadow: value
@@ -116,7 +118,9 @@ class ToggleSwitchComponent extends StatelessWidget {
         Text(
           label!,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: value ? aColor : context.lumen.textPrimary.withValues(alpha: 0.7),
+            color: value
+                ? aColor
+                : context.lumen.textPrimary.withValues(alpha: 0.7),
             fontWeight: value ? FontWeight.bold : FontWeight.normal,
           ),
         ),

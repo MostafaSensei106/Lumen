@@ -13,12 +13,12 @@ class DiffractionCalculator {
     if (thetaRad == 0) return initialIntensity; // Center maximum
 
     double beta = (math.pi * slitWidth / wavelength) * math.sin(thetaRad);
-    
+
     if (beta == 0) return initialIntensity;
 
     double sinBeta = math.sin(beta);
     double ratio = sinBeta / beta;
-    
+
     return initialIntensity * ratio * ratio;
   }
 

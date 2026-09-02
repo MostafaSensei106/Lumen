@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+
 import 'photon.dart';
 
 class RaySegment {

@@ -70,7 +70,11 @@ class IconButtonComponent extends StatelessWidget {
     if (enableGlow) {
       return button
           .animate(onPlay: (controller) => controller.repeat(reverse: true))
-          .scale(begin: const Offset(0.95, 0.95), end: const Offset(1.05, 1.05), duration: const Duration(seconds: 2));
+          .scale(
+            begin: const Offset(0.95, 0.95),
+            end: const Offset(1.05, 1.05),
+            duration: const Duration(seconds: 2),
+          );
     }
 
     return button;

@@ -97,7 +97,9 @@ class TextButtonComponent extends StatelessWidget {
                                 letterSpacing: 1.2,
                                 shadows: [
                                   Shadow(
-                                    color: effectiveColor.withValues(alpha: 0.8),
+                                    color: effectiveColor.withValues(
+                                      alpha: 0.8,
+                                    ),
                                     blurRadius: 5,
                                   ),
                                 ],

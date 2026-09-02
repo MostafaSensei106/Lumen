@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../modules/home/presentation/home_screen.dart';
 import '../../modules/levels/presentation/levels_screen.dart';
 import '../../modules/shop/presentation/shop_screen.dart';
@@ -14,13 +15,7 @@ final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: '/',
   debugLogDiagnostics: true,
-  routes: [
-    $homeRoute,
-    $levelsRoute,
-    $shopRoute,
-    $settingsRoute,
-    $profileRoute,
-  ],
+  routes: [$homeRoute, $levelsRoute, $shopRoute, $settingsRoute, $profileRoute],
 );
 
 @TypedGoRoute<HomeRoute>(path: '/')

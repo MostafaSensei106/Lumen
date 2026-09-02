@@ -66,7 +66,9 @@ class ProgressBarComponent extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius),
             boxShadow: [
               BoxShadow(
-                color: (fillColor ?? context.lumen.neonGlow).withValues(alpha: 0.5),
+                color: (fillColor ?? context.lumen.neonGlow).withValues(
+                  alpha: 0.5,
+                ),
                 blurRadius: 8,
                 spreadRadius: 1,
               ),

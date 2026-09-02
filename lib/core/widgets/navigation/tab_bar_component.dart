@@ -69,7 +69,9 @@ class TabBarComponent extends StatelessWidget {
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
-                                color: activeIndicatorColor.withValues(alpha: 0.8),
+                                color: activeIndicatorColor.withValues(
+                                  alpha: 0.8,
+                                ),
                                 blurRadius: 6,
                                 spreadRadius: 1,
                               ),
