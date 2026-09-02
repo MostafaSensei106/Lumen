@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lumen/core/router/app_router.dart';
+import 'package:lumen/core/widgets/widgets.dart';
 
 void main() {
   runApp(const LumenApp());
@@ -9,10 +11,10 @@ class LumenApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Lumen: Broken Circuit',
-      theme: ThemeData.dark(),
-      home: const Scaffold(body: Center(child: Text('Lumen: Broken Circuit'))),
+      theme: AppTheme.dark(),
+      routerConfig: appRouter,
     );
   }
 }

@@ -5,7 +5,7 @@ class SimulateWave {
   const SimulateWave();
 
   List<double> call({
-    required List<Ray> rays,
+    required List<RaySegment> rays,
     required double screenDistance,
     required int sampleCount,
   }) {

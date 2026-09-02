@@ -1,18 +1,14 @@
-/// Represents a light ray with origin, direction vector, intensity, and spectral properties.
-class Ray {
-  final double originX;
-  final double originY;
-  final double directionX;
-  final double directionY;
-  final double intensity;
-  final double wavelength;
+import 'package:flame/components.dart';
+import 'photon.dart';
 
-  const Ray({
-    required this.originX,
-    required this.originY,
-    required this.directionX,
-    required this.directionY,
-    this.intensity = 1.0,
-    required this.wavelength,
+class RaySegment {
+  final Vector2 start;
+  final Vector2 end;
+  final Photon photonState;
+
+  const RaySegment({
+    required this.start,
+    required this.end,
+    required this.photonState,
   });
 }

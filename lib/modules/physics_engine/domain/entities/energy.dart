@@ -1,9 +1,27 @@
-/// Value object representing photon and ray energy levels.
+import 'dart:math' as math;
+
 class Energy {
-  final double value;
+  final double joules;
+  const Energy(this.joules);
+}
 
-  const Energy(this.value);
+class EnergyAttenuation {
+  static const double referenceWavelength = 400.0; // nm
+  static const double referenceAttenuation = 0.001; // Base attenuation factor mu_0
 
-  Energy operator +(Energy other) => Energy(value + other.value);
-  Energy operator -(Energy other) => Energy(value - other.value);
+  /// Beer-Lambert Law: I(s) = I0 * e^(-mu * s)
+  static double calculateAttenuatedIntensity({
+    required double initialIntensity,
+    required double pathLength,
+    required double wavelength,
+  }) {
+    double mu = calculateAttenuationCoefficient(wavelength);
+    return initialIntensity * math.exp(-mu * pathLength);
+  }
+
+  /// Rayleigh scattering approximation: mu(lambda) = mu_0 * (lambda_0 / lambda)^4
+  static double calculateAttenuationCoefficient(double wavelength) {
+    double ratio = referenceWavelength / wavelength;
+    return referenceAttenuation * math.pow(ratio, 4);
+  }
 }

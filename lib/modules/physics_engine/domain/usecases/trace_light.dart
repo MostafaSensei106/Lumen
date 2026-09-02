@@ -5,8 +5,8 @@ import '../entities/optical_element.dart';
 class TraceLight {
   const TraceLight();
 
-  List<Ray> call({
-    required Ray sourceRay,
+  List<RaySegment> call({
+    required RaySegment sourceRay,
     required List<OpticalElement> elements,
     int maxBounces = 10,
   }) {

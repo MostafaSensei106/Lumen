@@ -1,14 +1,23 @@
-/// Base abstract class for all optical interactive elements in the simulation.
-abstract class OpticalElement {
-  final String id;
-  final double posX;
-  final double posY;
-  final double rotation;
+import 'package:flame/components.dart';
 
-  const OpticalElement({
-    required this.id,
-    required this.posX,
-    required this.posY,
-    this.rotation = 0.0,
+enum OpticalType { flatMirror, prism, beamSplitter, polarizer, grinBender, targetSensor }
+
+abstract class OpticalElement {
+  String get id;
+  Vector2 get position;
+  OpticalType get type;
+  
+  IntersectionResult? checkIntersection(Vector2 rayOrigin, Vector2 rayDirection);
+}
+
+class IntersectionResult {
+  final Vector2 point;
+  final Vector2 normal;
+  final double distance;
+  
+  IntersectionResult({
+    required this.point,
+    required this.normal,
+    required this.distance,
   });
 }
