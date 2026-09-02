@@ -6,6 +6,7 @@ import '../../modules/levels/presentation/levels_screen.dart';
 import '../../modules/shop/presentation/shop_screen.dart';
 import '../../modules/settings/presentation/settings_screen.dart';
 import '../../modules/profile/presentation/profile_screen.dart';
+import '../../modules/game/presentation/game_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -15,7 +16,14 @@ final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: '/',
   debugLogDiagnostics: true,
-  routes: [$homeRoute, $levelsRoute, $shopRoute, $settingsRoute, $profileRoute],
+  routes: [
+    $homeRoute,
+    $levelsRoute,
+    $shopRoute,
+    $settingsRoute,
+    $profileRoute,
+    $gameRoute,
+  ],
 );
 
 @TypedGoRoute<HomeRoute>(path: '/')
@@ -65,5 +73,16 @@ class ProfileRoute extends GoRouteData with $ProfileRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const ProfileScreen();
+  }
+}
+
+@TypedGoRoute<GameRoute>(path: '/game/:levelId')
+class GameRoute extends GoRouteData with $GameRoute {
+  final int levelId;
+  const GameRoute({required this.levelId});
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return GameScreen(levelId: levelId);
   }
 }

@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "level_id": 5,
+  "circuit_name": "Z3_Generated_Circuit_05",
+  "energy_budget": 100.0,
+  "star_criteria": {
+    "three_stars_max_energy": 50.0,
+    "three_stars_max_tools": 1
+  },
+  "emitter": {
+    "position": {
+      "x": 50,
+      "y": 300
+    },
+    "direction": {
+      "x": 1.0,
+      "y": 0.0
+    },
+    "wavelength": 632.8,
+    "intensity": 100.0,
+    "polarization_rad": 0.0
+  },
+  "target": {
+    "position": {
+      "x": 650,
+      "y": 450
+    },
+    "required_wavelength_min": 630.0,
+    "required_wavelength_max": 635.0,
+    "min_intensity": 40.0,
+    "required_polarization_rad": null,
+    "required_phase": null
+  },
+  "fixed_elements": [],
+  "available_inventory": {
+    "flat_mirrors": 2,
+    "grin_benders": 0,
+    "polarizers": 0
+  }
+}

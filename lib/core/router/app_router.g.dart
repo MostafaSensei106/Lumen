@@ -12,6 +12,7 @@ List<RouteBase> get $appRoutes => [
   $shopRoute,
   $settingsRoute,
   $profileRoute,
+  $gameRoute,
 ];
 
 RouteBase get $homeRoute => GoRouteData.$route(
@@ -129,6 +130,37 @@ mixin $ProfileRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/profile');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $gameRoute => GoRouteData.$route(
+  path: '/game/:levelId',
+  hasOverriddenOnExit: false,
+  factory: $GameRoute._fromState,
+);
+
+mixin $GameRoute on GoRouteData {
+  static GameRoute _fromState(GoRouterState state) =>
+      GameRoute(levelId: int.parse(state.pathParameters['levelId']!));
+
+  GameRoute get _self => this as GameRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/game/${Uri.encodeComponent(_self.levelId.toString())}',
+  );
 
   @override
   void go(BuildContext context) => context.go(location);

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:math' as math;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -11,21 +12,52 @@ import '../../physics_engine/domain/calculations/reflection/reflection_calculato
 import '../data/models/level_model.dart';
 import '../data/models/level_repository.dart';
 
-class DraggableMirror extends PositionComponent with DragCallbacks {
-  DraggableMirror({required Vector2 position})
-    : super(position: position, size: Vector2(80, 10)) {
+class Obstacle extends PositionComponent {
+  Obstacle({required Vector2 position, required Vector2 size}) : super(position: position, size: size) {
     anchor = Anchor.center;
-    // Set a 45 degree angle for testing reflection to the target
+  }
+
+  @override
+  void render(Canvas canvas) {
+    // Looks like a broken/burnt circuit chip
+    final paint = Paint()..color = const Color(0xFF1A1A24);
+    final borderPaint = Paint()..color = Colors.red.withOpacity(0.5)..style = PaintingStyle.stroke..strokeWidth = 2;
+    final rect = Rect.fromLTWH(-size.x / 2, -size.y / 2, size.x, size.y);
+    canvas.drawRect(rect, paint);
+    canvas.drawRect(rect, borderPaint);
+    
+    // Draw chip pins
+    final pinPaint = Paint()..color = Colors.grey;
+    for(int i = 0; i < size.x / 10; i++) {
+       canvas.drawLine(Offset(-size.x/2 + (i*10), -size.y/2), Offset(-size.x/2 + (i*10), -size.y/2 - 5), pinPaint);
+       canvas.drawLine(Offset(-size.x/2 + (i*10), size.y/2), Offset(-size.x/2 + (i*10), size.y/2 + 5), pinPaint);
+    }
+  }
+}
+
+class DraggableMirror extends PositionComponent with DragCallbacks {
+  DraggableMirror({required Vector2 position}) : super(position: position, size: Vector2(60, 60)) {
+    anchor = Anchor.center;
     angle = 3.14159 / 4;
   }
 
   @override
   void render(Canvas canvas) {
+    // Looks like a futuristic routing node
     final paint = Paint()
+      ..color = Colors.cyanAccent.withOpacity(0.1)
+      ..style = PaintingStyle.fill;
+    final strokePaint = Paint()
       ..color = Colors.cyanAccent
-      ..strokeWidth = 4
+      ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
-    canvas.drawLine(Offset(0, size.y / 2), Offset(size.x, size.y / 2), paint);
+      
+    canvas.drawCircle(Offset.zero, 30, paint);
+    canvas.drawCircle(Offset.zero, 30, strokePaint);
+    
+    // The reflective core
+    final corePaint = Paint()..color = Colors.white..strokeWidth = 4..style = PaintingStyle.stroke;
+    canvas.drawLine(const Offset(-20, 0), const Offset(20, 0), corePaint);
   }
 
   @override
@@ -35,45 +67,56 @@ class DraggableMirror extends PositionComponent with DragCallbacks {
 }
 
 class LumenGame extends FlameGame with PanDetector {
+  final int levelId;
+  LumenGame({this.levelId = 1});
+
   LevelModel? level;
-  DraggableMirror? mirror;
+  List<DraggableMirror> mirrors = [];
+  List<Obstacle> obstacles = [];
   List<RaySegment> activeRays = [];
 
   @override
-  Color backgroundColor() => const Color(0xFF0D0D12);
+  Color backgroundColor() => const Color(0xFF07070F);
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    level = await LevelRepository().loadLevel(1);
+    level = await LevelRepository().loadLevel(levelId);
 
-    // Add Emitter visual
-    add(
-      CircleComponent(
-        radius: 10,
-        position: level!.emitter.position.toVector2(),
-        anchor: Anchor.center,
-        paint: Paint()..color = Colors.redAccent,
-      ),
-    );
+    // Energy Source (Emitter) visual
+    add(CircleComponent(
+      radius: 12,
+      position: level!.emitter.position.toVector2(),
+      anchor: Anchor.center,
+      paint: Paint()..color = Colors.amberAccent,
+    ));
 
-    // Add Target visual
-    add(
-      CircleComponent(
-        radius: 15,
-        position: level!.target.position.toVector2(),
-        anchor: Anchor.center,
-        paint: Paint()
-          ..color = Colors.greenAccent
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3,
-      ),
-    );
+    // Core Receptor (Target) visual
+    add(CircleComponent(
+      radius: 18,
+      position: level!.target.position.toVector2(),
+      anchor: Anchor.center,
+      paint: Paint()..color = Colors.purpleAccent..style = PaintingStyle.stroke..strokeWidth = 4,
+    ));
 
-    // Add exactly one mirror from inventory (spawned in the center for the user to drag)
-    if (level!.availableMirrors > 0) {
-      mirror = DraggableMirror(position: Vector2(400, 300));
-      add(mirror!);
+    // Generate burnt chips (Obstacles)
+    final random = math.Random(levelId);
+    for (int i = 0; i < levelId; i++) {
+      final obstacle = Obstacle(
+        position: Vector2(200.0 + random.nextDouble() * 300, 150.0 + random.nextDouble() * 400),
+        size: Vector2(40.0 + random.nextDouble() * 60, 40.0 + random.nextDouble() * 100),
+      );
+      obstacles.add(obstacle);
+      add(obstacle);
+    }
+
+    // Spawn routing nodes (Mirrors)
+    int mirrorCount = level!.availableMirrors;
+    if (mirrorCount == 0 && levelId > 1) mirrorCount = levelId ~/ 2 + 1;
+    for (int i = 0; i < mirrorCount; i++) {
+      final mirror = DraggableMirror(position: Vector2(400 + (i * 20.0), 100 + (i * 50.0)));
+      mirrors.add(mirror);
+      add(mirror);
     }
   }
 
@@ -81,91 +124,88 @@ class LumenGame extends FlameGame with PanDetector {
   void update(double dt) {
     super.update(dt);
     if (level == null) return;
-
     activeRays.clear();
 
-    // 1. Initial Ray from Emitter
     Vector2 startPos = level!.emitter.position.toVector2();
     Vector2 dir = level!.emitter.direction.toVector2().normalized();
+    
+    _calculateRays(startPos, dir, 5);
+  }
 
-    // We shoot a long ray
+  void _calculateRays(Vector2 startPos, Vector2 dir, int bouncesLeft) {
+    if (bouncesLeft <= 0) return;
     Vector2 endPos = startPos + dir * 2000.0;
+    double minT = 2000.0;
+    Vector2? hitNormal;
+    Vector2? hitPoint;
 
-    RaySegment currentRay = RaySegment(
-      start: startPos,
-      end: endPos,
-      photonState: const Photon(
-        wavelength: 632.0,
-        frequency: 0,
-        intensity: 100,
-        phase: 0,
-        polarization: 0,
-      ),
-    );
-
-    // 2. Check collision with mirror
-    if (mirror != null) {
-      // Very basic line-to-line bounding box intersection for the mirror
-      // Mirror is at `mirror.position` with width 80 and angle 45 deg
-      // Let's check if the ray crosses the mirror's infinite line for a quick test
-
-      Vector2 mPos = mirror!.position;
-      Vector2 mNormal = Vector2(0, -1)
-        ..rotate(mirror!.angle); // normal of the mirror
-
-      // Ray line: p = startPos + t * dir
-      // Plane line: (p - mPos) . mNormal = 0
-      // (startPos + t*dir - mPos) . mNormal = 0
-      // t * (dir . mNormal) = (mPos - startPos) . mNormal
+    for (final mirror in mirrors) {
+      Vector2 mPos = mirror.position;
+      Vector2 mNormal = Vector2(0, -1)..rotate(mirror.angle);
       double denom = dir.dot(mNormal);
       if (denom.abs() > 0.0001) {
         double t = (mPos - startPos).dot(mNormal) / denom;
-        if (t > 0 && t < 2000) {
+        if (t > 0 && t < minT) {
           Vector2 intersection = startPos + dir * t;
-
-          // Check if intersection is within the 80px width of the mirror
-          double distFromCenter = (intersection - mPos).length;
-          if (distFromCenter <= 40) {
-            // Hit!
-            currentRay = RaySegment(
-              start: currentRay.start,
-              end: intersection,
-              photonState: currentRay.photonState,
-            );
-            activeRays.add(currentRay);
-
-            // Calculate Reflection using our engine
-            RaySegment reflectedRay = ReflectionCalculator.calculateReflection(
-              incidentRay: currentRay,
-              intersectionPoint: intersection,
-              surfaceNormal: mNormal,
-              reflectance: 0.9,
-            );
-            activeRays.add(reflectedRay);
-            return;
+          double dist = (intersection - mPos).length;
+          if (dist <= 25) { // Adjusted for node visual size
+            minT = t;
+            hitPoint = intersection;
+            hitNormal = mNormal;
           }
         }
       }
     }
 
-    activeRays.add(currentRay);
+    for (final obs in obstacles) {
+       Vector2 oPos = obs.position;
+       Vector2 diff = oPos - startPos;
+       double t = diff.dot(dir);
+       if (t > 0 && t < minT) {
+         Vector2 closest = startPos + dir * t;
+         // Check against bounds of the chip
+         if (closest.x > oPos.x - obs.size.x/2 && closest.x < oPos.x + obs.size.x/2 &&
+             closest.y > oPos.y - obs.size.y/2 && closest.y < oPos.y + obs.size.y/2) {
+            minT = t;
+            hitPoint = closest;
+            hitNormal = null; 
+         }
+       }
+    }
+
+    if (hitPoint != null) {
+      activeRays.add(RaySegment(start: startPos, end: hitPoint, photonState: const Photon(wavelength: 632, frequency: 0, intensity: 100, phase: 0, polarization: 0)));
+      if (hitNormal != null) {
+        Vector2 reflectedDir = dir - hitNormal * 2 * dir.dot(hitNormal);
+        _calculateRays(hitPoint + reflectedDir * 1.0, reflectedDir, bouncesLeft - 1);
+      }
+    } else {
+      activeRays.add(RaySegment(start: startPos, end: endPos, photonState: const Photon(wavelength: 632, frequency: 0, intensity: 100, phase: 0, polarization: 0)));
+    }
   }
 
   @override
   void render(Canvas canvas) {
+    // Draw background circuit grid
+    final gridPaint = Paint()..color = Colors.cyanAccent.withOpacity(0.05)..style = PaintingStyle.stroke..strokeWidth = 1;
+    for(double i = 0; i < size.x; i+=50) {
+      canvas.drawLine(Offset(i, 0), Offset(i, size.y), gridPaint);
+    }
+    for(double i = 0; i < size.y; i+=50) {
+      canvas.drawLine(Offset(0, i), Offset(size.x, i), gridPaint);
+    }
+    
     super.render(canvas);
-
+    
+    // Draw energy beam
     final paint = Paint()
-      ..color = Colors.redAccent.withValues(alpha: 0.8)
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke;
+      ..color = Colors.amberAccent.withOpacity(0.9)
+      ..strokeWidth = 4
+      ..style = PaintingStyle.stroke
+      ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 5); // Glow effect
 
     for (var ray in activeRays) {
-      canvas.drawLine(
-        Offset(ray.start.x, ray.start.y),
-        Offset(ray.end.x, ray.end.y),
-        paint,
-      );
+      canvas.drawLine(Offset(ray.start.x, ray.start.y), Offset(ray.end.x, ray.end.y), paint);
     }
   }
 }
