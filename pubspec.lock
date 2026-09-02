@@ -113,6 +113,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.4.1"
+  binarize:
+    dependency: transitive
+    description:
+      name: binarize
+      sha256: "9f0ff4059989f8b9ff09a951e1896998d55cac5fa0d86f701d0165ededf06622"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   bloc:
     dependency: transitive
     description:
@@ -209,6 +217,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  cached_value:
+    dependency: transitive
+    description:
+      name: cached_value
+      sha256: "534a6c618e2e891548236c90a3a3ac055dfe4c870efff29719cf28c51ca8b7a5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   characters:
     dependency: transitive
     description:
@@ -1021,6 +1037,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  mesh:
+    dependency: "direct main"
+    description:
+      name: mesh
+      sha256: "513eeca4f4decd6c4c5f829a7fdd68a55abe9b2b379a894dfb17978dee44b8f7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
   meta:
     dependency: transitive
     description:
