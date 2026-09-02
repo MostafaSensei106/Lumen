@@ -71,9 +71,9 @@ def generate_level():
         }
         
         # Create output directory
-        os.makedirs("../../assets/levels", exist_ok=True)
+        os.makedirs("assets/levels", exist_ok=True)
         
-        with open("../../assets/levels/level_01.json", "w") as f:
+        with open("assets/levels/level_01.json", "w") as f:
             json.dump(level_data, f, indent=2)
             
         print("Level 01 generated successfully using Z3 constraints!")
